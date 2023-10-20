@@ -11,7 +11,8 @@ class NetworkService {
       receiveTimeout: const Duration(seconds: 60),
     ));
 
-    if (!kDebugMode) {
+    if (kDebugMode) {
+      // show debug log in debug mode only
       dio.interceptors.add(PrettyDioLogger(
         request: false,
         maxWidth: 90,

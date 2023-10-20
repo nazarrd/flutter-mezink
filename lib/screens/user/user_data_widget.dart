@@ -61,7 +61,7 @@ class _UserDataWidgetState extends State<UserDataWidget> {
             ),
             columns: [
               DataColumn2(
-                fixedWidth: 15.w,
+                size: ColumnSize.L,
                 label: Row(
                   children: [
                     CheckBoxDefault(
@@ -74,43 +74,44 @@ class _UserDataWidgetState extends State<UserDataWidget> {
                       },
                     ),
                     const SizedBox(width: 8),
-                    const _ColumnTitle('Influencer Name'),
+                    _ColumnTitle(100.w >= 800 ? 'Influencer Name' : 'Name'),
                   ],
                 ),
                 onSort: (columnIndex, ascending) => _sort<String>(
                     (d) => '${d.firstName}', columnIndex, ascending),
               ),
-              DataColumn2(
-                fixedWidth: 10.w,
-                label: const _ColumnTitle('Grade'),
-                onSort: (columnIndex, ascending) =>
-                    _sort<String>((d) => '${d.grade}', columnIndex, ascending),
-              ),
-              DataColumn2(
-                fixedWidth: 10.w,
-                label: const _ColumnTitle('Followers'),
-                onSort: (columnIndex, ascending) => _sort<String>(
-                    (d) => '${d.followers}', columnIndex, ascending),
-              ),
-              DataColumn2(
-                label: const _ColumnTitle('Engagement Rate'),
-                onSort: (columnIndex, ascending) => _sort<String>(
-                    (d) => '${d.engagement}', columnIndex, ascending),
-              ),
-              DataColumn2(
-                label: const _ColumnTitle('Tags'),
-                onSort: (columnIndex, ascending) =>
-                    _sort<String>((d) => '${d.tags}', columnIndex, ascending),
-              ),
-              DataColumn2(
-                fixedWidth: 11.w,
-                label: const _ColumnTitle('Hashtags'),
-                onSort: (columnIndex, ascending) => _sort<String>(
-                    (d) => '${d.hashtags}', columnIndex, ascending),
-              ),
-              DataColumn2(
-                fixedWidth: 20.w,
-                label: const _ColumnTitle('Action'),
+              if (100.w >= 500)
+                DataColumn2(
+                  label: const _ColumnTitle('Grade'),
+                  onSort: (columnIndex, ascending) => _sort<String>(
+                      (d) => '${d.grade}', columnIndex, ascending),
+                ),
+              if (100.w >= 700)
+                DataColumn2(
+                  label: const _ColumnTitle('Followers'),
+                  onSort: (columnIndex, ascending) => _sort<String>(
+                      (d) => '${d.followers}', columnIndex, ascending),
+                ),
+              if (100.w >= 900)
+                DataColumn2(
+                  label: const _ColumnTitle('Engagement Rate'),
+                  onSort: (columnIndex, ascending) => _sort<String>(
+                      (d) => '${d.engagement}', columnIndex, ascending),
+                ),
+              if (100.w >= 1400)
+                DataColumn2(
+                  label: const _ColumnTitle('Tags'),
+                  onSort: (columnIndex, ascending) =>
+                      _sort<String>((d) => '${d.tags}', columnIndex, ascending),
+                ),
+              if (100.w >= 1200)
+                DataColumn2(
+                  label: const _ColumnTitle('Hashtags'),
+                  onSort: (columnIndex, ascending) => _sort<String>(
+                      (d) => '${d.hashtags}', columnIndex, ascending),
+                ),
+              const DataColumn2(
+                label: _ColumnTitle('Action'),
               ),
             ],
             rows: List<DataRow>.generate(dataLength, (int index) {
@@ -149,42 +150,53 @@ class _UserDataWidgetState extends State<UserDataWidget> {
                       ),
                     ]),
                     const SizedBox(width: 8),
-                    Text('${item.firstName} ${item.lastName}'),
-                  ],
-                )),
-                DataCell(
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text('${item.grade}', style: const TextStyle(fontSize: 12)),
-                    const SizedBox(width: 8),
-                    const CircleAvatar(
-                      radius: 5,
-                      backgroundColor: Colors.blue,
-                      child: Icon(Icons.check, size: 10, color: Colors.white),
-                    ),
-                  ]),
-                ),
-                DataCell(Center(child: Text('${item.followers}'))),
-                DataCell(Center(child: Text('${item.engagement}'))),
-                DataCell(Center(child: Text(item.tags ?? 'No Tags'))),
-                DataCell(Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Spacer(),
-                    Text(item.hashtags ?? 'No Hashtgas'),
-                    if (item.hashtags != null) ...[
-                      const SizedBox(height: 4),
-                      const Text(
-                        'More',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    Expanded(
+                      child: Text(
+                        '${item.firstName} ${item.lastName}',
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ],
-                    const Spacer(),
+                    ),
                   ],
                 )),
+                if (100.w >= 500)
+                  DataCell(
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Text('${item.grade}',
+                          style: const TextStyle(fontSize: 12)),
+                      const SizedBox(width: 8),
+                      const CircleAvatar(
+                        radius: 5,
+                        backgroundColor: Colors.blue,
+                        child: Icon(Icons.check, size: 10, color: Colors.white),
+                      ),
+                    ]),
+                  ),
+                if (100.w >= 700)
+                  DataCell(Center(child: Text('${item.followers}'))),
+                if (100.w >= 900)
+                  DataCell(Center(child: Text('${item.engagement}'))),
+                if (100.w >= 1400)
+                  DataCell(Center(child: Text(item.tags ?? 'No Tags'))),
+                if (100.w >= 1200)
+                  DataCell(Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Spacer(),
+                      Text(item.hashtags ?? 'No Hashtgas'),
+                      if (item.hashtags != null) ...[
+                        const SizedBox(height: 4),
+                        const Text(
+                          'More',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                      const Spacer(),
+                    ],
+                  )),
                 DataCell(Center(
                   child: Wrap(
                     spacing: 15,

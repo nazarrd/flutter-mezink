@@ -126,39 +126,53 @@ class _UserScreenState extends State<UserScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            Row(children: [
-              SizedBox(
-                width: 20.w,
-                child: TextFieldDefault(
-                  hintText: 'Search',
-                  controller: provider.searchController,
-                  textInputAction: TextInputAction.search,
-                  onFieldSubmitted: (value) => provider.filterData(null, value),
-                  prefixIcon: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Icon(Icons.search),
-                  ),
-                  suffixIcon: Visibility(
-                    visible: provider.searchController.text.isNotEmpty,
-                    child: InkWell(
-                      onTap: () => provider.clearValue(clearAll: false),
-                      child: const Icon(Icons.clear),
+            LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final isSmallScreen = 100.w <= 600;
+                final child = [
+                  Container(
+                    margin: EdgeInsets.only(bottom: isSmallScreen ? 16 : 0),
+                    constraints: BoxConstraints(
+                        maxWidth: isSmallScreen ? double.infinity : 30.w),
+                    child: TextFieldDefault(
+                      hintText: 'Search',
+                      controller: provider.searchController,
+                      textInputAction: TextInputAction.search,
+                      onFieldSubmitted: (value) =>
+                          provider.filterData(null, value),
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Icon(Icons.search),
+                      ),
+                      suffixIcon: Visibility(
+                        visible: provider.searchController.text.isNotEmpty,
+                        child: InkWell(
+                          onTap: () => provider.clearValue(clearAll: false),
+                          child: const Icon(Icons.clear),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const Spacer(),
-              ButtonDefault(
-                'Refresh Data',
-                onPressed: () => provider.getUserData(reset: true),
-              ),
-              const SizedBox(width: 10),
-              ButtonDefault(
-                'Add Influencer',
-                onPressed: () =>
-                    dialogDefault(context, child: const UserFormWidget()),
-              ),
-            ]),
+                  if (!isSmallScreen) const Spacer(),
+                  ButtonDefault(
+                    'Refresh Data',
+                    onPressed: () => provider.getUserData(reset: true),
+                  ),
+                  const SizedBox(width: 10),
+                  ButtonDefault(
+                    'Add Influencer',
+                    onPressed: () =>
+                        dialogDefault(context, child: const UserFormWidget()),
+                  ),
+                ];
+
+                return Visibility(
+                  visible: isSmallScreen,
+                  replacement: Row(children: child),
+                  child: Wrap(children: child),
+                );
+              },
+            ),
             const SizedBox(height: 16),
             UserDataWidget(provider.searchMode
                 ? provider.filteredUser

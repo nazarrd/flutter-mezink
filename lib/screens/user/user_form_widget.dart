@@ -34,7 +34,7 @@ class UserFormWidget extends StatelessWidget {
         Form(
           key: formKey,
           child: Container(
-            width: 50.w,
+            width: 100.w <= 600 ? null : 50.w,
             margin: const EdgeInsets.symmetric(vertical: 16),
             child: Column(children: [
               const SizedBox(height: 8),
@@ -72,139 +72,115 @@ class UserFormWidget extends StatelessWidget {
                       ),
               ),
               const SizedBox(height: 24),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(
-                  width: 24.5.w,
-                  child: TextFieldDefault(
-                    readOnly: readOnly,
-                    label: 'First Name',
-                    hintText: 'enter first name',
-                    initialValue: user.firstName,
-                    onChanged: (value) => update(() => user.firstName = value),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'first name cannot be empty';
-                      } else {
-                        return null;
-                      }
-                    },
+              TextFieldDefault(
+                readOnly: readOnly,
+                label: 'First Name',
+                hintText: 'enter first name',
+                initialValue: user.firstName,
+                onChanged: (value) => update(() => user.firstName = value),
+                margin: const EdgeInsets.only(bottom: 16),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'first name cannot be empty';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              TextFieldDefault(
+                readOnly: readOnly,
+                label: 'Last Name',
+                hintText: 'enter last name',
+                initialValue: user.lastName,
+                onChanged: (value) => update(() => user.lastName = value),
+                margin: const EdgeInsets.only(bottom: 16),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'last name cannot be empty';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              AbsorbPointer(
+                absorbing: readOnly,
+                child: DropdownDefault(
+                  label: 'Grades',
+                  hintText: 'select grade',
+                  data: grades,
+                  selected: user.grade,
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  onChanged: (value) => update(() => user.grade = value),
+                  hintStyle: const TextStyle(
+                    fontSize: 14,
+                    height: 1.75,
                   ),
                 ),
-                SizedBox(
-                  width: 24.5.w,
-                  child: TextFieldDefault(
-                    readOnly: readOnly,
-                    label: 'Last Name',
-                    hintText: 'enter last name',
-                    initialValue: user.lastName,
-                    onChanged: (value) => update(() => user.lastName = value),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'last name cannot be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
+              ),
+              TextFieldDefault(
+                readOnly: readOnly,
+                label: 'Followers',
+                hintText: 'ex: 100k',
+                initialValue: user.followers,
+                margin: const EdgeInsets.only(bottom: 16),
+                onChanged: (value) => update(() => user.followers = value),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'followers cannot be empty';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              TextFieldDefault(
+                readOnly: readOnly,
+                label: 'Engagement Rate',
+                hintText: 'ex: 10%',
+                initialValue: user.engagement,
+                margin: const EdgeInsets.only(bottom: 16),
+                onChanged: (value) => update(() => user.engagement = value),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'engagement rate cannot be empty';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              Visibility(
+                visible: !readOnly,
+                child: TextFieldDefault(
+                  readOnly: readOnly,
+                  label: 'Tags',
+                  hintText: 'separate with comma',
+                  initialValue: user.tags,
+                  onChanged: (value) => update(() => user.tags = value),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'tags cannot be empty';
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(
-                  width: 16.w,
-                  child: AbsorbPointer(
-                    absorbing: readOnly,
-                    child: DropdownDefault(
-                      label: 'Grades',
-                      hintText: 'select grade',
-                      data: grades,
-                      selected: user.grade,
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      onChanged: (value) => update(() => user.grade = value),
-                      hintStyle: const TextStyle(
-                        fontSize: 14,
-                        height: 1.75,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 16.w,
-                  child: TextFieldDefault(
-                    readOnly: readOnly,
-                    label: 'Followers',
-                    hintText: 'ex: 100k',
-                    initialValue: user.followers,
-                    margin: const EdgeInsets.only(bottom: 16),
-                    onChanged: (value) => update(() => user.followers = value),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'followers cannot be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 16.w,
-                  child: TextFieldDefault(
-                    readOnly: readOnly,
-                    label: 'Engagement Rate',
-                    hintText: 'ex: 10%',
-                    initialValue: user.engagement,
-                    margin: const EdgeInsets.only(bottom: 16),
-                    onChanged: (value) => update(() => user.engagement = value),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'engagement rate cannot be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(
-                  width: 24.5.w,
-                  child: TextFieldDefault(
-                    readOnly: readOnly,
-                    label: 'Tags',
-                    hintText: 'separate with comma',
-                    initialValue: user.tags,
-                    onChanged: (value) => update(() => user.tags = value),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'tags cannot be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 24.5.w,
-                  child: TextFieldDefault(
-                    readOnly: readOnly,
-                    label: 'Hashtags',
-                    hintText: 'separate with comma',
-                    initialValue: user.hashtags,
-                    onChanged: (value) => update(() => user.hashtags = value),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'hashtags cannot be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-              ]),
+              ),
+              TextFieldDefault(
+                readOnly: readOnly,
+                label: 'Hashtags',
+                hintText: 'separate with comma',
+                initialValue: user.hashtags,
+                onChanged: (value) => update(() => user.hashtags = value),
+                margin: const EdgeInsets.only(bottom: 16),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'hashtags cannot be empty';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
             ]),
           ),
         ),

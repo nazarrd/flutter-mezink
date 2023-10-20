@@ -88,7 +88,7 @@ class _UserScreenState extends State<UserScreen> {
                 (
                   key: provider.followers,
                   title: 'Followers',
-                  items: ['<10k', '10-50k', '50-500k', '>500k']
+                  items: ['<50k', '50k-100k', '100k-500k', '>500k']
                 ),
                 (
                   key: provider.platform,
@@ -110,8 +110,7 @@ class _UserScreenState extends State<UserScreen> {
                   hintText: e.title,
                   data: e.items,
                   selected: e.key,
-                  onChanged: (String? value) =>
-                      provider.setValue(e.title, value),
+                  onChanged: (value) => provider.filterData(e.title, value),
                 );
               }).toList(),
             ),
@@ -134,7 +133,7 @@ class _UserScreenState extends State<UserScreen> {
                   hintText: 'Search',
                   controller: provider.searchController,
                   textInputAction: TextInputAction.search,
-                  onFieldSubmitted: (value) => provider.searchUserData(value),
+                  onFieldSubmitted: (value) => provider.filterData(null, value),
                   prefixIcon: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Icon(Icons.search),
@@ -161,9 +160,9 @@ class _UserScreenState extends State<UserScreen> {
               ),
             ]),
             const SizedBox(height: 16),
-            UserDataWidget(provider.searchController.text.isEmpty
-                ? provider.listUser
-                : provider.filteredUser),
+            UserDataWidget(provider.searchMode
+                ? provider.filteredUser
+                : provider.listUser),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

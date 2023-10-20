@@ -105,35 +105,6 @@ class UserData {
     data['tempImage'] = tempImage;
     return data;
   }
-
-  UserData copyWith({
-    int? id,
-    String? email,
-    String? firstName,
-    String? lastName,
-    String? avatar,
-    String? grade,
-    String? followers,
-    String? platform,
-    String? engagement,
-    String? tags,
-    String? hashtags,
-    Uint8List? tempImage,
-  }) {
-    return UserData(
-      id: id ?? this.id,
-      email: email ?? this.email,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      avatar: avatar ?? this.avatar,
-      grade: grade ?? this.grade,
-      followers: followers ?? this.followers,
-      engagement: engagement ?? this.engagement,
-      tags: tags ?? this.tags,
-      hashtags: hashtags ?? this.hashtags,
-      tempImage: tempImage ?? this.tempImage,
-    );
-  }
 }
 
 class Support {

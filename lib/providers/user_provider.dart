@@ -15,6 +15,7 @@ class UserProvider extends ChangeNotifier {
   List<UserData> filteredUser = [];
   bool? isLoading;
   bool isLast = false;
+  bool searchMode = false;
   int currentPage = 1;
   int totalPages = 0;
   int perPage = 8;
@@ -31,7 +32,11 @@ class UserProvider extends ChangeNotifier {
     });
   }
 
-  void setValue(String? key, String? value) {
+  void filterData(String? key, String? value) {
+    // enter search mode
+    searchMode = true;
+    filteredUser.clear();
+
     // convert the key to lowercase for case-insensitive matching
     final newKey = key?.toLowerCase();
 
@@ -46,8 +51,18 @@ class UserProvider extends ChangeNotifier {
       platform = value;
     } else if (newKey == 'gender') {
       gender = value;
-    } else {
+    } else if (newKey == 'country') {
       country = value;
+    }
+
+    if (['platform', 'gender', 'country'].contains(newKey)) {
+      // enter search mode
+      searchMode = false;
+      filteredUser.clear();
+      snackBarDefault('API response has no ${key?.toLowerCase()} data');
+    } else {
+      filteredUser = filterByEngagement(filterByFollowers(
+          searchUserData('$value'.replaceAll('#', ''), allListUser)));
     }
 
     notifyListeners();
@@ -62,6 +77,7 @@ class UserProvider extends ChangeNotifier {
     // clear list and controller data
     filteredUser.clear();
     searchController.clear();
+    searchMode = false;
 
     notifyListeners();
   }
@@ -96,6 +112,7 @@ class UserProvider extends ChangeNotifier {
 
       // if reset is true, clear the user lists, reset page data, and start fresh
       if (reset) {
+        clearValue();
         listUser?.clear();
         allListUser?.clear();
         filteredUser.clear();
@@ -177,21 +194,6 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  void searchUserData(String keyword) {
-    // clear existing search data
-    filteredUser.clear();
-    for (UserData e in listUser ?? []) {
-      // find user by firstname, lastname or hastag
-      if ('${e.firstName?.toLowerCase()}'.contains(keyword.toLowerCase()) ||
-          '${e.lastName?.toLowerCase()}'.contains(keyword.toLowerCase()) ||
-          (e.hashtags?.contains(keyword.toLowerCase()) ?? false)) {
-        // add match value to filteredUser
-        filteredUser.add(e);
-      }
-    }
-    notifyListeners();
-  }
-
   void addUser(UserData? user) {
     // add the new item at the beginning
     user?.id = DateTime.now().millisecondsSinceEpoch;
@@ -208,5 +210,67 @@ class UserProvider extends ChangeNotifier {
       paginateData();
       notifyListeners();
     }
+  }
+
+  List<UserData> searchUserData(String keyword, List<UserData>? data) {
+    if (keyword.contains('%') || keyword.contains(' k')) return data!;
+    return (data?.isEmpty == true ? allListUser : data)!.where((e) {
+      // set all value to lowercase
+      final lowerKeyword = keyword.toLowerCase();
+      final lowerFirstName = e.firstName?.toLowerCase() ?? "";
+      final lowerLastName = e.lastName?.toLowerCase() ?? "";
+      final hashtags = e.hashtags ?? '';
+
+      // do filter
+      return lowerFirstName.contains(lowerKeyword) ||
+          lowerLastName.contains(lowerKeyword) ||
+          hashtags.contains(lowerKeyword);
+    }).toList();
+  }
+
+  List<UserData> filterByEngagement(List<UserData>? data) {
+    // do filter
+    if (engagement == null) return data!;
+    return (data?.isEmpty == true ? allListUser : data)!.where((e) {
+      double percent =
+          double.tryParse('${e.engagement}'.replaceAll('%', '')) ?? 0;
+
+      if (engagement == '<25%') {
+        if (percent < 25) return true;
+      }
+      if (engagement == '25-50%') {
+        if (percent >= 25 && percent <= 50) return true;
+      }
+      if (engagement == '50-75%') {
+        if (percent > 50 && percent <= 75) return true;
+      }
+      if (engagement == '>75%') {
+        if (percent > 75) return true;
+      }
+      return false;
+    }).toList();
+  }
+
+  List<UserData> filterByFollowers(List<UserData>? data) {
+    // do filter
+    if (followers == null) return data!;
+    return (data?.isEmpty == true ? allListUser : data)!.where((e) {
+      double followerCount =
+          (double.tryParse('${e.followers}'.replaceAll("k", "")) ?? 0) * 1000;
+
+      if (followers == '<50k') {
+        if (followerCount <= 50000) return true;
+      }
+      if (followers == '50k-100k') {
+        if (followerCount >= 50000 && followerCount <= 100000) return true;
+      }
+      if (followers == '100k-500k') {
+        if (followerCount >= 100000 && followerCount <= 500000) return true;
+      }
+      if (followers == '>500k') {
+        if (followerCount >= 500000) return true;
+      }
+      return false;
+    }).toList();
   }
 }

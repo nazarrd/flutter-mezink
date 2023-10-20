@@ -273,4 +273,15 @@ class UserProvider extends ChangeNotifier {
       return false;
     }).toList();
   }
+
+  void sort<T>(Comparable<T> Function(UserData d) getField, bool ascending) {
+    listUser?.sort((a, b) {
+      final aValue = getField(a);
+      final bValue = getField(b);
+      return ascending
+          ? Comparable.compare(aValue, bValue)
+          : Comparable.compare(bValue, aValue);
+    });
+    notifyListeners();
+  }
 }

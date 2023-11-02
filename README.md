@@ -1,16 +1,21 @@
-# mezink
+# Mezink Flutter Hiring Challenge
 
-A new Flutter project.
+A Flutter web page that displays a table of users fetched from the [test API](https://reqres.in/).
 
-## Getting Started
+### Specifications:
+1. API: https://reqres.in/
+2. State Management: [Provider](https://pub.dev/packages/provider)
+3. HTTP Requests: [Dio](https://pub.dev/packages/dio)
+4. Table Widget: [DataTable2](https://pub.dev/packages/data_table_2)
 
-This project is a starting point for a Flutter application.
+### Feature
+This web is hosted using Firebase hosting. [Click here to see demo](https://test-a6b03--539a89-fdlm06ex.web.app/).
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Pagination: Implement pagination for the user data. The table should not load all
+the users at once but should provide an option to navigate through pages.
+2. Search: Include a basic search bar to search through user names or any relevant
+user data.
+3. Filter: Implement a basic filter mechanism to filter out users based on specific
+criteria (e.g., based on user role, location, etc.).
+4. Sorting: Users should be able to click on table column headers to sort the data in
+ascending or descending order based on that particular column.
